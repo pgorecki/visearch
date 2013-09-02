@@ -55,6 +55,11 @@
 			<artifactId>crawler4j</artifactId>
 			<version>3.5</version>
 		</dependency>
+		<dependency>
+			<groupId>visearch.core</groupId>
+			<artifactId>visearch.core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
