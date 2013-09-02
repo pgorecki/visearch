@@ -1,0 +1,1 @@
+cbir_crawler> mvn clean compile assembly:single
