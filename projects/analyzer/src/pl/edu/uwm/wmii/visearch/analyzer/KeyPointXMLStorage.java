@@ -6,6 +6,7 @@ package pl.edu.uwm.wmii.visearch.analyzer;
  */
 
 import java.io.File;
+import java.nio.file.Files;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -106,7 +107,17 @@ public class KeyPointXMLStorage {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(fileName));
+			
+			
+			File xmlFile = new File(fileName);
+			
+			File parentXmlFile = xmlFile.getParentFile();
+			if(!parentXmlFile.exists())
+			{
+				parentXmlFile.mkdirs();
+			}
+			
+			StreamResult result = new StreamResult(xmlFile);
 			
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);

@@ -13,7 +13,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>visearch.crawler.CrawlerManager</mainClass>
+							<mainClass>pl.edu.uwm.wmii.visearch.crawler.CrawlerManager</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
