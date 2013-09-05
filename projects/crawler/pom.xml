@@ -19,6 +19,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>crawlerManager</finalName>
 				</configuration>
 			</plugin>
 
