@@ -54,34 +54,48 @@ public class Main {
 		KeyPointXMLStorage storage = new KeyPointXMLStorage();
 		DbManagement manager = new DbManagement(configFile.get("dbUrl"),
 				configFile.get("dbUser"), configFile.get("dbPass")
-		);
+				);
 		manager.connect();
-		
-		List<String> paths = manager.getImagePaths(exMethod);
-		while (!paths.isEmpty()) {
 
-			for (String imageName : paths) {
+
+		long int counter=1;
+		List<String> pathsDB = manager.getImagePaths(exMethod);
+		while (!pathsDB.isEmpty()) {
+
+			for (String imageName : pathsDB) {
 
 				MatOfKeyPoint kp = new MatOfKeyPoint();
 				Mat des = new Mat();
 
-				extractor.Extract(imagesDir+"/"+imageName, exMethod, kp, des);
-				Path p = Paths.get(imageName);
-				String fileName = p.getFileName().toString();
-				String descr = exMethod.toString();
-				String descriptorXMLFile = descr + "/"
-						+ fileName + ".xml";
-				storage.save(kp, des, descriptorsDir + "/" + descriptorXMLFile, exMethod);
-				manager.InsertDescriptor(fileName, exMethod, descriptorXMLFile);
-				paths = manager.getImagePaths(exMethod);
+				Path imagePath = Paths.get(imagesDir+"/"+imageName);
+				File imageFile = new File(imagePath.toString());
+
+				if(imageFile.exists())
+				{
+
+					System.out.print(counter+ " process file: "+imagePath.toString());
+
+					extractor.Extract(imagePath.toString(), exMethod, kp, des);
+					String fileName = imagePath.getFileName().toString();
+					String descr = exMethod.toString();
+					String descriptorXMLFile = descr + "/"+ fileName + ".xml";
+
+					storage.save(kp, des, descriptorsDir + "/" + descriptorXMLFile, exMethod);
+					manager.InsertDescriptor(fileName, exMethod, descriptorXMLFile);
+					System.out.println(" -- [Ok]");
+				}else {
+					System.out.println(" ->File not exitst:"+imagePath.toString());
+				}
+
 			}
+
+			pathsDB = manager.getImagePaths(exMethod);
 		}
-		
+
 		manager.disconnect();
 
 		dt = new Date();
 		System.out.println("end detecting " + dt.toString());
 
 	}
-
 }
