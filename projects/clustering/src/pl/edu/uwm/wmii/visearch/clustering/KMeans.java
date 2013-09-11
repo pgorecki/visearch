@@ -117,10 +117,10 @@ public class KMeans {
 		log.info(conf.toString());
 		log.info(conf.get("fs.default.name"));
 
-		//log.info("saving Input to HDFS");
-		//setInput(conf);
+		log.info("saving Input to HDFS");
+		setInput(conf);
 		
-		//runClustering(conf);
+		runClustering(conf);
 		
 		
 		log.info("aa");
