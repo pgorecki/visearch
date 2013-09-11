@@ -62,7 +62,8 @@ public class CrawlerManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Done!");
+		dbConnection.close();
+		System.out.println("Done!");		
 	}
 
 }
