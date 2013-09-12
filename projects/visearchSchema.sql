@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.8.1deb1
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas wygenerowania: 10 Wrz 2013, 14:07
--- Wersja serwera: 5.5.32-0ubuntu0.13.04.1
--- Wersja PHP: 5.4.9-4ubuntu2.3
+-- Generation Time: Sep 12, 2013 at 01:29 PM
+-- Server version: 5.5.32
+-- PHP Version: 5.3.10-1ubuntu3.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,61 +17,66 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Baza danych: `VisualSearchDB`
+-- Database: `VisualSearchDB`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `IFS`
+-- Table structure for table `IFS`
 --
 
+DROP TABLE IF EXISTS `IFS`;
 CREATE TABLE IF NOT EXISTS `IFS` (
-  `visualWord` int(11) NOT NULL,
-  `imageId` varchar(64) NOT NULL,
-  PRIMARY KEY (`visualWord`,`imageId`)
+  `VisualWord` int(11) NOT NULL,
+  `ImageId` bigint(20) NOT NULL,
+  PRIMARY KEY (`VisualWord`,`ImageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ImageDescriptors`
+-- Table structure for table `ImageDescriptors`
 --
 
+DROP TABLE IF EXISTS `ImageDescriptors`;
 CREATE TABLE IF NOT EXISTS `ImageDescriptors` (
-  `FileName` varchar(128) NOT NULL DEFAULT '',
+  `ImageId` bigint(20) NOT NULL DEFAULT '0',
   `descriptor` varchar(10) NOT NULL,
   `creation_date` date NOT NULL,
   `settings_path` varchar(255) NOT NULL,
   `descriptor_file_path` varchar(255) NOT NULL,
-  PRIMARY KEY (`FileName`,`descriptor`)
+  PRIMARY KEY (`ImageId`,`descriptor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ImageRepresentations`
+-- Table structure for table `ImageRepresentations`
 --
 
+DROP TABLE IF EXISTS `ImageRepresentations`;
 CREATE TABLE IF NOT EXISTS `ImageRepresentations` (
-  `imageId` varchar(64) NOT NULL,
-  `representation` text NOT NULL,
-  PRIMARY KEY (`imageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `ImageId` bigint(20) NOT NULL,
+  `Representation` text NOT NULL,
+  PRIMARY KEY (`ImageId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `Images`
+-- Table structure for table `Images`
 --
 
+DROP TABLE IF EXISTS `Images`;
 CREATE TABLE IF NOT EXISTS `Images` (
-  `FileName` varchar(128) NOT NULL DEFAULT '',
+  `ImageId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `FileName` varchar(128) NOT NULL,
   `FileDirectory` varchar(128) NOT NULL,
   `URL` varchar(1024) NOT NULL,
   `TimeStamp` int(11) NOT NULL,
-  PRIMARY KEY (`FileName`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ImageId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=256 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
