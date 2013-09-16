@@ -15,7 +15,7 @@
 return array(
      'db' => array(
          'driver'         => 'Pdo',
-         'dsn'            => 'mysql:dbname=AlbumZF;host=localhost',
+         'dsn'            => 'mysql:dbname=VisualSearchDB;host=localhost',
          'driver_options' => array(
              PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
          ),

@@ -158,7 +158,7 @@ public class KMeans {
 		log.info(conf.toString());
 		log.info(conf.get("fs.default.name"));
 
-<<<<<<< HEAD
+/*
 		log.info("saving Input to HDFS");
 		setInput(conf);
 		
@@ -175,11 +175,10 @@ public class KMeans {
 	    }
 	    log.info("cc");
 	    
-	    
-=======
+	*/    
+
 		FileSystem fs = FileSystem.get(conf);
 		ConfigFile configFile = new ConfigFile("settings.cfg");
->>>>>>> b6c83e4e7e60520935b3c6dd990f9344e15d2bdc
 
 		// stworz pliki z deskryptorami na podstawie xml'i
 		// TODO: w takim formacie Anazyler powinien zapisywac pliki od razu do
