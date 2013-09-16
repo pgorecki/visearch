@@ -9,14 +9,33 @@
 
 namespace Search\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Controller\AbstractActionController; 
+use Zend\View\Model\ViewModel;
+use Search\Model\Image;          // <-- Add this import
+
 
 class SearchController extends AbstractActionController
 {
-    public function indexAction()
-    {
-        return array();
-    }
+	
+	public $imageTable;
+	
+	
+	public function getImageTable()
+	{
+		if (!$this->imageTable) {
+			$sm = $this->getServiceLocator();
+			$this->imageTable = $sm->get('Search\Model\ImageTable');
+		}
+		return $this->imageTable;
+	}
+	
+	public function indexAction()
+	{
+		return new ViewModel(array(
+				'images' => $this->getImageTable()->fetchAll(),
+		));
+	}
+	
 
     public function fooAction()
     {

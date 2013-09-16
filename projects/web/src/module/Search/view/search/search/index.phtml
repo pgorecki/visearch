@@ -1,3 +1,33 @@
-<strong>Module:</strong>        Search &raquo;
-<strong>Controller:</strong>    Search &raquo;
-<strong>Action:</strong>        index
+<?php
+
+
+ $title = 'Images';
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+
+ <table class="table">
+ <tr>
+     <th>Id</th>
+     <th>FileName</th>
+     <th>FileDirectory</th>
+     <th>Url</th>
+     <th>Timestamp</th>
+     <th>ImPath</th>
+      <th>&nbsp;</th>
+ </tr>
+ <?php foreach ($images as $im) : ?>
+ <tr>
+     <td><?php echo $this->escapeHtml($im->imageId);?></td>
+     <td><?php echo $this->escapeHtml($im->fileName);?></td>
+     <td><?php echo $this->escapeHtml($im->fileDirectory);?></td>
+     <td><?php echo $this->escapeHtml($im->url);?></td>
+     <td><?php echo $this->escapeHtml($im->timeStamp);?></td>
+     <td><?php echo $this->escapeHtml($im->imagePath);?></td>
+     <td>
+         <a href="#">Edit</a>
+         <a href="#">Delete</a>
+     </td>
+ </tr>
+ <?php endforeach; ?>
+ </table>

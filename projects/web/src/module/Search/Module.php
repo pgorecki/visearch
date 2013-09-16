@@ -9,6 +9,12 @@
 
 namespace Search;
 
+
+use Search\Model\Image;
+use Search\Model\ImageTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -43,4 +49,27 @@ class Module implements AutoloaderProviderInterface
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
     }
+    
+    public function getServiceConfig()
+    {
+    	return array(
+    			'factories' => array(
+    					'Search\Model\ImageTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ImageTableGateway');
+    						$conf = $sm->get('config');
+    						
+    						$table = new ImageTable($tableGateway);
+    						return $table;
+    					},
+    					'ImageTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Image());
+    						return new TableGateway('Images', $dbAdapter, null, $resultSetPrototype);
+    					},
+    			),
+    	);
+    }
+    
+    
 }
