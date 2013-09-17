@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -138,7 +139,7 @@ public class KMeans {
 
 		DistanceMeasure measure = new EuclideanDistanceMeasure();
 		double convergenceDelta = 0.01;
-		int maxIterations = 100;
+		int maxIterations = 10;
 
 		// Random clusters
 		clusters = RandomSeedGenerator.buildRandom(conf, DESCRIPTORS_DIR,
@@ -156,26 +157,7 @@ public class KMeans {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		log.info(conf.toString());
-		log.info(conf.get("fs.default.name"));
-
-/*
-		log.info("saving Input to HDFS");
-		setInput(conf);
-		
-		runClustering(conf);
-		
-		
-		log.info("aa");
-		String outDir = "kmeans/data1/out/clusters-*-final";
-	    for (ClusterWritable cw :
-	           new SequenceFileDirValueIterable<ClusterWritable>(new Path(outDir, "part-*"), PathType.GLOB, conf)) {
-	    	Cluster c = cw.getValue();
-	    	log.info(c.toString());
-	    	log.info(c.getCenter().toString());
-	    }
-	    log.info("cc");
-	    
-	*/    
+		log.info(conf.get("fs.default.name")); 
 
 		FileSystem fs = FileSystem.get(conf);
 		ConfigFile configFile = new ConfigFile("settings.cfg");
@@ -245,9 +227,9 @@ public class KMeans {
 		log.info("Connected to {}", dbUrl);
 		
 		Statement statement = dbConnection.createStatement();
-
 		statement.executeUpdate("DELETE FROM ImageRepresentations");
 		statement.executeUpdate("DELETE FROM IFS");
+		
 		
 		Path representationsFile = new Path(REPRESENTATIONS_DIR, "part-0");
 		SequenceFile.Reader reader = new SequenceFile.Reader(FileSystem.get(conf), representationsFile, conf);
@@ -256,16 +238,25 @@ public class KMeans {
 		String sql;
 		while (reader.next(key, val)) {
 			// save representation
-			sql = "INSERT INTO ImageRepresentations VALUES('"+key+"','"+val.toString()+"')";
-			statement.executeUpdate(sql);
+			PreparedStatement ps;
+			
+			sql = "INSERT INTO ImageRepresentations SELECT ImageId, ? FROM Images WHERE FileName LIKE ?";
+			ps = dbConnection.prepareStatement(sql);
+			ps.setString(1, val.toString());
+			ps.setString(2, key.toString()+"%");
+			ps.executeUpdate();
+			
 			
 			// save IFS
 			Iterator<Vector.Element> it = val.get().nonZeroes().iterator();			
 		
 			while( it.hasNext()) {
 				Vector.Element element = it.next();
-				sql = "INSERT INTO IFS VALUES('"+element.index()+"','"+key+"')";
-				statement.executeUpdate(sql);
+				sql = "INSERT INTO IFS SELECT ?, ImageId FROM Images WHERE FileName LIKE ?";
+				ps = dbConnection.prepareStatement(sql);
+				ps.setInt(1, element.index());
+				ps.setString(2, key.toString()+"%");
+				ps.executeUpdate();
 			}
 		}
 

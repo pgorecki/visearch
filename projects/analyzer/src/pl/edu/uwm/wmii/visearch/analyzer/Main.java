@@ -39,7 +39,7 @@ public class Main {
 
 		ConfigFile configFile = new ConfigFile("settings.cfg");
 
-		String descriptorsDir = configFile.get("desriptorsDir");
+		String descriptorsDir = configFile.get("descriptorsDir");
 		String imagesDir = configFile.get("imagesDir");
 
 		System.out.println("Welcome to OpenCV " + Core.VERSION);
@@ -58,7 +58,7 @@ public class Main {
 		manager.connect();
 
 
-		long int counter=1;
+		long counter=1;
 		List<String> pathsDB = manager.getImagePaths(exMethod);
 		while (!pathsDB.isEmpty()) {
 

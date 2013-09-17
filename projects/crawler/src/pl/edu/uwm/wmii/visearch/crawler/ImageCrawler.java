@@ -199,7 +199,7 @@ public class ImageCrawler extends WebCrawler {
 			   Statement statement= dbConnection.createStatement();
 							 
 			   try {
-				   String polecenie="INSERT INTO `Images`(`FileName`, `FileDirectory`, `URL`, `TimeStamp`)"+"VALUES ('"+hashedName+"','"+domainPath+"','"+page.getWebURL().getURL()+"',"+timestamp+")";
+				   String polecenie="INSERT INTO `Images`(`FileName`, `FileDirectory`, `URL`, `Created`)"+"VALUES ('"+hashedName+"','"+domainPath+"','"+page.getWebURL().getURL()+"', NOW())";
 				   statement.executeUpdate(polecenie);
 				   statement.close();
 			   }

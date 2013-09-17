@@ -2,6 +2,7 @@ package pl.edu.uwm.wmii.visearch.analyzer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -39,15 +40,13 @@ public class DbManagement {
 			Statement statement= conn.createStatement();
 			String descr = method.toString(); 
 			ResultSet resultSet = statement.executeQuery("SELECT FileName,FileDirectory FROM Images " +
-					"WHERE FileName NOT IN (SELECT FileName FROM ImageDescriptors WHERE descriptor ='"
+					"WHERE ImageId NOT IN (SELECT ImageId FROM ImageDescriptors WHERE descriptor ='"
 					+descr+"') LIMIT 10");
 
 			List<String> paths = new ArrayList<String>(11);
 
 			while (resultSet.next()) {  
-
 				paths.add(resultSet.getString("FileDirectory")+resultSet.getString("FileName"));
-
 			}
 			return paths;
 		}
@@ -61,12 +60,17 @@ public class DbManagement {
 	public void InsertDescriptor(String fileName, ExtractionMethod method, String descriptorPath ){
 
 		try {
-			Statement statement = conn.createStatement();
-
-			String descr = method.toString(); 
-
-			statement.executeUpdate("INSERT INTO ImageDescriptors VALUES('"+fileName+"','" +
-					descr+"',NOW(),'"+descriptorPath+"','')");
+			String sql;
+			String descr = method.toString();
+			
+			PreparedStatement ps;
+			
+			sql = "INSERT INTO ImageDescriptors SELECT ImageId, ?, NOW(), ? FROM Images WHERE FileName=?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, descr);
+			ps.setString(2, descriptorPath);
+			ps.setString(3, fileName);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
