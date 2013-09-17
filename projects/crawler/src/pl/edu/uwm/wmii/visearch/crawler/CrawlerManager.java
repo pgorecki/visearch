@@ -35,14 +35,12 @@ public class CrawlerManager {
 				dbUser, dbPass);
 		System.out.println("Connected to " + dbUrl);
 
-		int numberOfCrawlers = 1;
+		int numberOfCrawlers = Integer.parseInt(configFile.get("crawlerCount"));
 		CrawlConfig config = new CrawlConfig();
 		config.setCrawlStorageFolder("storage");
-		config.setPolitenessDelay(1000);
-		// config.setMaxDepthOfCrawling(3);
-		// config.setMaxPagesToFetch(100);
+		config.setPolitenessDelay(Integer.parseInt(configFile.get("crawlerPolitenessDelay")));
 		config.setIncludeBinaryContentInCrawling(true);
-		config.setResumableCrawling(true);
+		config.setResumableCrawling(Integer.parseInt(configFile.get("crawlerResumeCrawling"))>0);
 
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotsTxtConfig = new RobotstxtConfig();
@@ -55,7 +53,7 @@ public class CrawlerManager {
 					pageFetcher, robotstxtServer);
 			controller.addSeed(args[0]);
 			ImageCrawler.configure(domainFilter, configFile.get("imagesDir"),
-					dbConnection);
+					dbConnection, configFile);
 			System.out.println("Starting crawler @" + args[0]);
 			controller.start(ImageCrawler.class, numberOfCrawlers);
 		} catch (Exception e) {

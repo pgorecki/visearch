@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>visearch.crawler</groupId>
   <artifactId>visearch.crawler</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
@@ -19,7 +19,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>crawlerManager</finalName>
+					<!-- <finalName>crawlerManager</finalName> -->
 				</configuration>
 			</plugin>
 
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>visearch.core</groupId>
 			<artifactId>visearch.core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 	</dependencies>
 

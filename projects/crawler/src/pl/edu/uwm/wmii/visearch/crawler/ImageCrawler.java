@@ -30,6 +30,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Statement;
@@ -57,7 +58,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
  */
 public class ImageCrawler extends WebCrawler {
 
-	private static final int SAVED_IMAGE_SIZE = 100;
+	private static int SAVED_IMAGE_SIZE;
 
 	private static final Pattern filters = Pattern
 			.compile(".*(\\.(css|js|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf"
@@ -70,7 +71,9 @@ public class ImageCrawler extends WebCrawler {
 	private static String domainFilter;
 	private static Connection dbConnection;
 
-	public static void configure(String domain, String storageFolderName, Connection dbConnection) {
+	public static void configure(String domain, String storageFolderName,
+			Connection dbConnection, ConfigFile configFile)
+			throws NumberFormatException, InvalidKeyException {
 		ImageCrawler.domainFilter = domain;
 		ImageCrawler.dbConnection = dbConnection;
 
@@ -78,6 +81,8 @@ public class ImageCrawler extends WebCrawler {
 		if (!storageFolder.exists()) {
 			storageFolder.mkdirs();
 		}
+		
+		SAVED_IMAGE_SIZE = Integer.parseInt(configFile.get("crawlerDownloadImageSize"));
 	}
 
 	@Override
@@ -99,8 +104,8 @@ public class ImageCrawler extends WebCrawler {
 			result = false;
 		}
 
-		System.out.format("(%s:%d) %s in %s\n", Boolean.toString(result),
-				url.getDepth(), href, domain);
+		//System.out.format("%s (%d): %s\n", domain, url.getDepth(), href);
+		System.out.print(".");
 		return result;
 	}
 
@@ -122,7 +127,7 @@ public class ImageCrawler extends WebCrawler {
 
 		// Get a unique name for storing this image
 		String extension = url.substring(url.lastIndexOf("."));
-		String hashedName = Cryptography.MD5(url) + extension;
+		String hashedName = Cryptography.MD5(url)+".png";
 
 		// Create destination directory for the image
 		String[] parts = page.getWebURL().getDomain().split("\\.");
@@ -182,7 +187,6 @@ public class ImageCrawler extends WebCrawler {
 				imgOut = imgIn;
 			}
 			
-			hashedName += ".png"; 
 			ImageIO.write(imgOut, "png", new File(finalDirName + hashedName));			
 			System.out.println("  saved to: "+ finalDirName + hashedName);
 			
