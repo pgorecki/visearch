@@ -47,7 +47,7 @@ public class ConfigFile {
 		if (result==null) {
 			throw new InvalidKeyException("Key not found: "+key);
 		}
-		return result;
+		return result.trim();
 	}
 
 	
