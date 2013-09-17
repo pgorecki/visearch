@@ -13,6 +13,8 @@ namespace Search;
 use Search\Model\Image;
 use Search\Model\ImageTable;
 use Zend\Db\ResultSet\ResultSet;
+
+use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -65,6 +67,11 @@ class Module implements AutoloaderProviderInterface
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Image());
+    						
+    						//aby mozna bylo modyfikowac obiekty z result set'a
+    						//$resultSetPrototype = new HydratingResultSet();
+    						//$resultSetPrototype->setObjectPrototype(new Image());
+    						
     						return new TableGateway('Images', $dbAdapter, null, $resultSetPrototype);
     					},
     			),

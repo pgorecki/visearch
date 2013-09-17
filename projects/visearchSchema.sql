@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `IFS` (
   `VisualWord` int(11) NOT NULL,
   `ImageId` bigint(20) NOT NULL,
   PRIMARY KEY (`VisualWord`,`ImageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `ImageDescriptors` (
   `Created` datetime NOT NULL,
   `DescriptorsPath` varchar(255) NOT NULL,
   PRIMARY KEY (`ImageId`,`Descriptor`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
