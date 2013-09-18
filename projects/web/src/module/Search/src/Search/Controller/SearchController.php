@@ -35,6 +35,29 @@ class SearchController extends AbstractActionController
 				'images' => $this->getImageTable()->fetchAll(),
 		));
 	}
+
+	public function searchrankingAction()
+	{
+		$data = $this->getServiceLocator()->get('Search\Model\SearchDBManager');
+		
+		$id = 4;
+		$img = $this->getImageTable()->getImage($id);
+		
+		
+		$imgRep = $data->getImgRepresentation($id);
+		
+		
+		//$ranking = $data->getRankingForImage($imgRep);
+		
+		$picId = $imgRep['ImageId'];
+		$picRep = $imgRep['Representation'];
+		
+		return new ViewModel(array(
+				'images' => array(),
+				'image' => $img,
+				'imgRep' =>$imgRep
+		));
+	}
 	
 
     public function fooAction()

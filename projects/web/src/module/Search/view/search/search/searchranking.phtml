@@ -1,0 +1,33 @@
+<?php
+
+
+ $title = 'Search Image Ranking';
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+
+ <div>
+ <h2>Random Image from Database</h2>
+ 
+ <img src="<?php echo $image->imagePath ?>" alt="<?php echo $imge->imageId?>" />
+ 
+ 
+ <h3>Image ID= <?php echo $imgRep['ImageId']; ?></h3>
+ <h3>Image Representation:</h3> 
+ <pre>
+<?php echo $imgRep['Representation']; ?>
+ </pre>
+ </div>
+ 
+ 
+ <h2>Image results</h2>
+  
+ <ul>
+
+ <?php foreach ($images as $im) : ?>
+ 
+ <li>
+     <img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" /></td>
+</li>     
+ <?php endforeach; ?>
+ </ul>

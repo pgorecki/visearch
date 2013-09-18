@@ -10,9 +10,21 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class ImageTable implements ServiceLocatorAwareInterface {
 	protected $serviceLocator;
 	protected $tableGateway;
+	
+	
 	public function __construct(TableGateway $tableGateway) {
 		$this->tableGateway = $tableGateway;
 	}
+	
+	
+	public function getImgRepresentation($id)
+	{
+		
+		
+		
+	}
+	
+	
 	public function fetchAll() {
 		// $resultSet = $this->tableGateway->select();
 		// return $resultSet;
@@ -23,36 +35,44 @@ class ImageTable implements ServiceLocatorAwareInterface {
 		} );
 		
 		
-		$folerDir = '/pics/';
-		
 		$resultSet->buffer ();
 		
 		$images = array();
 		
 		foreach ($resultSet as $img)
 		{
-			$img->imagePath = $folerDir.$img->fileDirectory.'/'.$img->fileName;
+			//$img->imagePath = $folerDir.$img->fileDirectory.$img->fileName;
+			
+			$img = $this->setImagepath($img);
 			$images[] = $img;	
 		}
-		
-		
-		
+			
 		return $images;
 		//return $resultSet;
 	}
+	
+	
 	public function getImage($id) {
 		$id = ( int ) $id;
 		$rowset = $this->tableGateway->select ( array (
 				'ImageId' => $id 
 		) );
-		$row = $rowset->current ();
+		$row = $rowset->current();
+		
+		$row = $this->setImagePath($row);
+		
 		if (! $row) {
 			throw new \Exception ( "Could not find row $id" );
 		}
 		return $row;
 	}
+	
+	
 	public function saveImage(Image $image) {
 	}
+	
+	
+	
 	public function deleteImage($id) {
 		$this->tableGateway->delete ( array (
 				'ImageId' => $id 
@@ -64,4 +84,13 @@ class ImageTable implements ServiceLocatorAwareInterface {
 	public function getServiceLocator() {
 		return $this->serviceLocator;
 	}
+	
+	protected function setImagePath($img)
+	{
+		$folerDir = '/pics/';
+		
+		$img->imagePath = $folerDir.$img->fileDirectory.$img->fileName;
+		return $img;
+	}
+	
 }

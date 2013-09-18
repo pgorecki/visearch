@@ -20,6 +20,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Search\src\Search\Model\DBManager;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -73,6 +74,11 @@ class Module implements AutoloaderProviderInterface
     						//$resultSetPrototype->setObjectPrototype(new Image());
     						
     						return new TableGateway('Images', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Search\Model\SearchDBManager' =>  function($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');    
+    						$searchMenager =new \Search\Model\SearchDBManager($dbAdapter); 						
+    					    return $searchMenager;
     					},
     			),
     	);

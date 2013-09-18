@@ -57,6 +57,9 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ),
+        'factories' => array(
+        	'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory', // <-- add this
+        ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
         ),
@@ -92,6 +95,36 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'navigation' => array(
+    		'default' => array(
+    				array(
+    						'label' => 'Home',
+    						'route' => 'home',
+    				),
+    				array(
+    						'label' => 'Search ranking',
+    						'route' => 'search',
+    						'action'=> 'searchranking',
+    				),
+    				array(
+    						'label' => 'ImSearch',
+    						'route' => 'search',
+    						'pages' => array(
+    								array(
+    										'label' => 'All Img',
+    										'route' => 'search',
+    										'action' => 'index',
+    								),
+    								array(
+    										'label' => 'Search Image',
+    										'route' => 'search',
+    										'action' => 'searchranking',
+    								),
+    						),
+    				),
+    		),
+    ),
+    
     // Placeholder for console routes
     'console' => array(
         'router' => array(
