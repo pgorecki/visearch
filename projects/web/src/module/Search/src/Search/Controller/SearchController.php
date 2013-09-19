@@ -47,13 +47,28 @@ class SearchController extends AbstractActionController
 		$imgRep = $data->getImgRepresentation($id);
 		
 		
-		//$ranking = $data->getRankingForImage($imgRep);
-		
 		$picId = $imgRep['ImageId'];
 		$picRep = $imgRep['Representation'];
 		
+		$vw = $data->getVisualWordsFromRep($picRep);
+			
+		
+		$candidates =$data->getRankingCandidates($vw);
+		
+		//$ranking = $data->getRankingForImage($imgRep);
+		
+		
+		$imIds = array_keys($candidates);
+		
+		//$imIds = array(1,2,3,4);
+		
+		$imTable = $this->getImageTable();
+		
+		$images = $imTable->fetchImages($imIds);
+	
+		
 		return new ViewModel(array(
-				'images' => array(),
+				'images' => $images,
 				'image' => $img,
 				'imgRep' =>$imgRep
 		));

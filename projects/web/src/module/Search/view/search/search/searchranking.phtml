@@ -22,7 +22,7 @@
  
  <h2>Image results</h2>
   
- <ul>
+ <ol>
 
  <?php foreach ($images as $im) : ?>
  
@@ -30,4 +30,4 @@
      <img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" /></td>
 </li>     
  <?php endforeach; ?>
- </ul>
+ </ol>
