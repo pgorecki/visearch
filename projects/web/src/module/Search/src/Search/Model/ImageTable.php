@@ -45,8 +45,8 @@ class ImageTable implements ServiceLocatorAwareInterface {
 		$imageTable = $this->tableGateway;
 		
 		
-		//this doesn't work $imageIds are undefined
-		//but when we write id explicte as 'array(1,2,3)' than it works 
+		//this doesn't work, $imageIds are undefined
+		//but when we write ids explicte as 'array(1,2,3)' than it works 
 		 /* $resultSet = $imageTable->select ( function (Select $select) { 
 		  		$select->where->in('ImageId',$imageIds ); 
 		 } );

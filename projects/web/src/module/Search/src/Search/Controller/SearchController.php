@@ -13,6 +13,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Search\Model\Image;          // <-- Add this import
 
+use Search\Model\ImageRankingCandidate;
+use Search\Model\Ranking;
+use Search\Model\Ranking\EuclideanScore;
+
+
 
 class SearchController extends AbstractActionController
 {
@@ -40,7 +45,7 @@ class SearchController extends AbstractActionController
 	{
 		$data = $this->getServiceLocator()->get('Search\Model\SearchDBManager');
 		
-		$id = 4;
+		$id = (int) $this->params()->fromRoute('id', 1);
 		$img = $this->getImageTable()->getImage($id);
 		
 		
@@ -55,20 +60,15 @@ class SearchController extends AbstractActionController
 		
 		$candidates =$data->getRankingCandidates($vw);
 		
+		$scoring = new EuclideanScore();
+		
+		$candidates= $scoring->Score($vw,$candidates);
+		
+		
 		//$ranking = $data->getRankingForImage($imgRep);
-		
-		
-		$imIds = array_keys($candidates);
-		
-		//$imIds = array(1,2,3,4);
-		
-		$imTable = $this->getImageTable();
-		
-		$images = $imTable->fetchImages($imIds);
-	
-		
+			
 		return new ViewModel(array(
-				'images' => $images,
+				'images' => $candidates,
 				'image' => $img,
 				'imgRep' =>$imgRep
 		));

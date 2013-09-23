@@ -9,6 +9,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Where;
+use Search\Model\ImageRankingCandidate;
 
 
 //class DBManager implements ServiceLocatorAwareInterface {
@@ -69,24 +70,47 @@ class SearchDBManager {
 		$adapter= $this->db;
 		//$adapter->query('SELECT COUNT(*), ImageId FROM `IFS` WHERE `VisualWord` IN (?) GROUP BY ImageId ORDER BY 1 DESC ', $vw);
 		
-		$t = join(',', $vw);		
+		
+		$keyVW = array_keys($vw);
+		$t = join(',', $keyVW);		
 
 		$numVW = array($minNumVW);
-		$statement = $adapter->createStatement('SELECT COUNT(*) as numVW, ImageId FROM `IFS` WHERE `VisualWord` in ('.$t.') GROUP BY ImageId HAVING numVW>? ORDER BY 1 DESC ',$numVW);
+		$statement = $adapter->createStatement('SELECT COUNT(*) as numVW, I.ImageId, IR.Representation, Concat(I.FileDirectory,I.FileName) as ImPath  FROM `IFS`, Images I, ImageRepresentations IR WHERE IFS.ImageId =I.ImageId and I.ImageId=IR.ImageId and `VisualWord` in ('.$t.') GROUP BY ImageId HAVING numVW>? ORDER BY 1 DESC ',$numVW);
 
 		$result = $statement->execute();
 		
-		$imgId = array();
+		$folerDir = '/pics/';
+		$imgRank = array();
 		foreach ($result as $row) {
-			$imgId[$row['ImageId']]=$row['numVW'];
+			
+			$rankCand = new ImageRankingCandidate();
+			$rankCand->imageId =$row['ImageId'];
+			$rankCand->vwIntersection =$row['numVW'];
+			
+			$rankCand->path = $folerDir. $row['ImPath'];
+			
+			
+			$rankCand->representation = $this->getVisualWordsFromRep($row['Representation']);
+			
+			$rankCand->score = $rankCand->vwIntersection;
+			
+			$imgRank[]=$rankCand;
 		}
 		
-		return  $imgId;
+		return  $imgRank;
 		
 	}
 	
 	
-	
+	/**
+	 * Get visual wors array from string representation
+	 * 
+	 * assciative array { vwId1 => occurences, ...}
+	 * 
+	 * 
+	 * @param string $imgRep
+	 * @return array - 
+	 */
 	public function getVisualWordsFromRep($imgRep){
 		
 		//regexp
@@ -94,7 +118,12 @@ class SearchDBManager {
 		preg_match_all($pattern, $imgRep, $matches);
 		
 		$vw=$matches[1];
-		sort($vw);
+		$occur = $matches[2];
+		
+		//combine new associative array form vw and occurences
+		$vw = array_combine($vw, $occur);
+		
+		ksort($vw);
 		
 		
 		//json format

@@ -27,7 +27,9 @@
  <?php foreach ($images as $im) : ?>
  
  <li>
-     <img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" /></td>
+     <img src="<?php echo $this->escapeHtml($im->path);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" />
+     <strong> Id: <?php echo $this->escapeHtml($im->imageId);?></strong>
+     <strong> Score: <?php echo $this->escapeHtml($im->score);?></strong>
 </li>     
  <?php endforeach; ?>
  </ol>
