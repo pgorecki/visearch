@@ -13,6 +13,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Search\Model\Image;          // <-- Add this import
 
+use Search\Model\ImageRankingCandidate;
+use Search\Model\Ranking;
+use Search\Model\Ranking\EuclideanScore;
+
+
 
 class SearchController extends AbstractActionController
 {
@@ -33,6 +38,39 @@ class SearchController extends AbstractActionController
 	{
 		return new ViewModel(array(
 				'images' => $this->getImageTable()->fetchAll(),
+		));
+	}
+
+	public function searchrankingAction()
+	{
+		$data = $this->getServiceLocator()->get('Search\Model\SearchDBManager');
+		
+		$id = (int) $this->params()->fromRoute('id', 1);
+		$img = $this->getImageTable()->getImage($id);
+		
+		
+		$imgRep = $data->getImgRepresentation($id);
+		
+		
+		$picId = $imgRep['ImageId'];
+		$picRep = $imgRep['Representation'];
+		
+		$vw = $data->getVisualWordsFromRep($picRep);
+			
+		
+		$candidates =$data->getRankingCandidates($vw);
+		
+		$scoring = new EuclideanScore();
+		
+		$candidates= $scoring->Score($vw,$candidates);
+		
+		
+		//$ranking = $data->getRankingForImage($imgRep);
+			
+		return new ViewModel(array(
+				'images' => $candidates,
+				'image' => $img,
+				'imgRep' =>$imgRep
 		));
 	}
 	

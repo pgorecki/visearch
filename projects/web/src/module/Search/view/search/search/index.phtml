@@ -12,7 +12,7 @@
      <th>FileName</th>
      <th>FileDirectory</th>
      <th>Url</th>
-     <th>Timestamp</th>
+     <th>Created</th>
      <th>ImPath</th>
       <th>&nbsp;</th>
  </tr>
@@ -22,8 +22,8 @@
      <td><?php echo $this->escapeHtml($im->fileName);?></td>
      <td><?php echo $this->escapeHtml($im->fileDirectory);?></td>
      <td><?php echo $this->escapeHtml($im->url);?></td>
-     <td><?php echo $this->escapeHtml($im->timeStamp);?></td>
-     <td><?php echo $this->escapeHtml($im->imagePath);?></td>
+     <td><?php echo $this->escapeHtml($im->created);?></td>
+     <td><img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" /></td>
      <td>
          <a href="#">Edit</a>
          <a href="#">Delete</a>
