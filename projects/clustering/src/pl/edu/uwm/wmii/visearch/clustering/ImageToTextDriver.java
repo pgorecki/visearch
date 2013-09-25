@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.mysql.jdbc.log.Log;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -291,6 +292,11 @@ public final class ImageToTextDriver extends AbstractJob {
 			Path clustersIn, Path output)
 			throws IOException, InterruptedException, ClassNotFoundException {
 
+		// TODO: przerobic na Map-Reduce
+		classifyClusterSeq(conf, input, clustersIn, output);
+		
+		//throw new NotImplementedException("to trzeba doimplementowac");
+		/*
 		Double clusterClassificationThreshold = 0.0;
 		boolean emitMostLikely = true;
 		
@@ -303,7 +309,7 @@ public final class ImageToTextDriver extends AbstractJob {
 				.toUri().toString());
 
 		Job job = new Job(conf,
-				"Cluster Classification Driver running over input: " + input);
+				"ImageToText Driver running over input: " + input);
 		job.setJarByClass(ImageToTextDriver.class);
 
 		job.setInputFormatClass(SequenceFileInputFormat.class);
@@ -322,6 +328,7 @@ public final class ImageToTextDriver extends AbstractJob {
 					"Image To Text Driver Job failed processing "
 							+ input);
 		}
+		*/
 	}
 
 }
