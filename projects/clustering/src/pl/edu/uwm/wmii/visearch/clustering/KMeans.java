@@ -136,9 +136,10 @@ public class KMeans {
 			}
 		}
 		writer.close();
+		System.out.println("Done making a bigfile");
 	}
 
-	private static void runClustering(Configuration conf, int k)
+	private static void runClustering(Configuration conf, ConfigFile configFile)
 			throws IOException, ClassNotFoundException, InterruptedException {
 
 		FileSystem fs = FileSystem.get(conf);
@@ -147,13 +148,14 @@ public class KMeans {
 		fs.delete(DICTIONARY_DIR, true);
 
 		DistanceMeasure measure = new EuclideanDistanceMeasure();
-		double convergenceDelta = 0.01;
-		int maxIterations = 2;
+		int k = configFile.get("dictionarySize",100);
+		double convergenceDelta = configFile.get("dictionaryConvergenceDelta",0.001);
+		int maxIterations = configFile.get("dictionaryMaxIterations",10);
 
 		// Random clusters
 		clusters = RandomSeedGenerator.buildRandom(conf, DESCRIPTORS_DIR,
 				clusters, k, measure);
-		log.info("Random clusters generated, running K-Means");
+		log.info("Random clusters generated, running K-Means, k="+k+" maxIter="+maxIterations);
 
 		KMeansDriver.run(conf, DESCRIPTORS_DIR, clusters, DICTIONARY_DIR,
 				measure, convergenceDelta, maxIterations, true, 0.0,
@@ -162,6 +164,10 @@ public class KMeans {
 		log.info("KMeans done");
 	}
 
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		log.info(conf.toString());
@@ -177,12 +183,11 @@ public class KMeans {
 		ConfigFile configFile = new ConfigFile("settings.cfg");
 
 		// stworz pliki z deskryptorami na podstawie xml'i
-		// TODO: najlepiej zeby Anazyler zapisywal pliki od razu do hdfs
+		// TODO: najlepiej zeby Anazyler zapisywal pliki od razu do hdfs (daily basis?)
 		createInput(conf, configFile, DESCRIPTORS_DIR);
 
 		// uruchom K-Means dla deskryptorow
-		int k = Integer.parseInt(configFile.get("dictionarySize"));
-		runClustering(conf, k);
+		runClustering(conf, configFile);
 
 		ImageToTextDriver.run(conf, DESCRIPTORS_DIR, DICTIONARY_DIR,
 				VISUAL_WORDS_DIR, VM.RunSequential());
