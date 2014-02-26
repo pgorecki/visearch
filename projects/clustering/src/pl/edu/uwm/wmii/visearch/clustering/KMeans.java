@@ -179,8 +179,11 @@ public class KMeans {
 	 */
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		log.info(conf.toString());
-		log.info(conf.get("fs.default.name"));
+		conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
+        conf.addResource(new Path("/usr/local/hadoop/conf/conf/hdfs-site.xml"));
+		
+		log.info("Configuration: "+conf.toString());
+		log.info("fs.default.name: "+conf.get("fs.default.name"));
 
 		if (VM.RunSequential()) {
 			System.out.println("Running as SEQ");
