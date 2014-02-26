@@ -15,6 +15,23 @@
 					<target />
 				</configuration>
 			</plugin>
+
+			<!-- plugin do budowania jar'a -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>pl.edu.uwm.wmii.visearch.analyzer.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<!-- <finalName>crawlerManager</finalName> -->
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
@@ -39,7 +56,7 @@
 		<dependency>
 			<groupId>visearch.core</groupId>
 			<artifactId>visearch.core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 
 	</dependencies>

@@ -55,4 +55,24 @@ public class ConfigFile {
 		return props.getProperty(key, defaultValue);
 	}
 
+	public int get(String key, int defaultValue) {
+		String s = props.getProperty(key, Integer.toString(defaultValue));
+		try {
+			return Integer.parseInt(s);
+		}
+		catch (NumberFormatException e){
+			return defaultValue;
+		}
+	}
+
+	public double get(String key, double defaultValue) {
+		String s = props.getProperty(key, Double.toString(defaultValue));
+		try {
+			return Double.parseDouble(s);
+		}
+		catch (NumberFormatException e){
+			return defaultValue;
+		}
+	}
+
 }
