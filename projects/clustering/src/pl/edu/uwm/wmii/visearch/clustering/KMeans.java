@@ -118,21 +118,26 @@ public class KMeans {
 		for (File f : files.listFiles()) {
 			String docId = f.getName().split("\\.")[0];
 
-			Document doc = dBuilder.parse(f);
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName("desc");
-			for (int i = 0; i < nList.getLength(); i++) {
-				String csv = nList.item(i).getTextContent();
-				String[] csvParts = csv.split(",");
-				double[] data = new double[csvParts.length];
-				for (int j = 0; j < csvParts.length; j++) {
-					data[j] = Integer.parseInt(csvParts[j].trim());
+			try {
+				Document doc = dBuilder.parse(f);
+				doc.getDocumentElement().normalize();
+				NodeList nList = doc.getElementsByTagName("desc");
+				for (int i = 0; i < nList.getLength(); i++) {
+					String csv = nList.item(i).getTextContent();
+					String[] csvParts = csv.split(",");
+					double[] data = new double[csvParts.length];
+					for (int j = 0; j < csvParts.length; j++) {
+						data[j] = Integer.parseInt(csvParts[j].trim());
+					}
+					StringBuilder sb = new StringBuilder();
+					sb.append(docId).append(":").append(i);
+					key.set(sb.toString());
+					val.set(new DenseVector(data));
+					writer.append(key, val);
 				}
-				StringBuilder sb = new StringBuilder();
-				sb.append(docId).append(":").append(i);
-				key.set(sb.toString());
-				val.set(new DenseVector(data));
-				writer.append(key, val);
+			}
+			catch (Exception e) {
+				System.out.println(e);
 			}
 		}
 		writer.close();
