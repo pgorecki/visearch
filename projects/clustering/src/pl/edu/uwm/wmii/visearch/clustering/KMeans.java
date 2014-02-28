@@ -115,9 +115,12 @@ public class KMeans {
 		// obrazka
 		// k: [hash obrazka]:[kolejny numer deskryptora]
 		// v: [deskryptor, 128 elementow dla SIFT'a]
+		int totalFiles = 0;
+		int badFiles = 0;
+		
 		for (File f : files.listFiles()) {
+			totalFiles++;
 			String docId = f.getName().split("\\.")[0];
-
 			try {
 				Document doc = dBuilder.parse(f);
 				doc.getDocumentElement().normalize();
@@ -137,11 +140,12 @@ public class KMeans {
 				}
 			}
 			catch (Exception e) {
-				System.out.println(e);
+				badFiles++;
+				System.out.println(badFiles+"/"+totalFiles+" "+e);
 			}
 		}
 		writer.close();
-		System.out.println("Done making a bigfile");
+		System.out.println("Done making a bigfile, #files: "+(totalFiles-badFiles));
 	}
 
 	private static void runClustering(Configuration conf, ConfigFile configFile)
@@ -175,8 +179,11 @@ public class KMeans {
 	 */
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		log.info(conf.toString());
-		log.info(conf.get("fs.default.name"));
+		conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
+        conf.addResource(new Path("/usr/local/hadoop/conf/conf/hdfs-site.xml"));
+		
+		log.info("Configuration: "+conf.toString());
+		log.info("fs.default.name: "+conf.get("fs.default.name"));
 
 		if (VM.RunSequential()) {
 			System.out.println("Running as SEQ");
