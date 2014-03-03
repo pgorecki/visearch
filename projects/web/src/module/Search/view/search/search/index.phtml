@@ -1,7 +1,7 @@
 <?php
 
 
- $title = 'Images';
+ $title = 'All Images';
  $this->headTitle($title);
  ?>
  <h1><?php echo $this->escapeHtml($title); ?></h1>
@@ -18,12 +18,18 @@
  </tr>
  <?php foreach ($images as $im) : ?>
  <tr>
+ 	<td>
+ 	<a href="<?php echo $this->url('search',array('action'=>'searchranking', 'id'=>$im->imageId))?>">
+ 	<img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" />
+ 	</a>
+ 	
+ 	</td>
      <td><?php echo $this->escapeHtml($im->imageId);?></td>
      <td><?php echo $this->escapeHtml($im->fileName);?></td>
      <td><?php echo $this->escapeHtml($im->fileDirectory);?></td>
      <td><?php echo $this->escapeHtml($im->url);?></td>
      <td><?php echo $this->escapeHtml($im->created);?></td>
-     <td><img src="<?php echo $this->escapeHtml($im->imagePath);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" /></td>
+     
      <td>
          <a href="#">Edit</a>
          <a href="#">Delete</a>

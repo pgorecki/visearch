@@ -22,7 +22,7 @@ class ImageTable implements ServiceLocatorAwareInterface {
 		$imageTable = $this->tableGateway;
 		
 		$resultSet = $imageTable->select ( function (Select $select) {
-			$select->limit ( 10 );
+			$select->limit (100 );
 		} );
 		
 		$resultSet->buffer ();
