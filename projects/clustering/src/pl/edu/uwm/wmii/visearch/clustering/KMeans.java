@@ -155,6 +155,7 @@ public class KMeans {
 		Path clusters = new Path(BASE_DIR, new Path("initial-clusters"));
 
 		fs.delete(DICTIONARY_DIR, true);
+		fs.mkdirs(DICTIONARY_DIR);
 
 		DistanceMeasure measure = new EuclideanDistanceMeasure();
 		int k = configFile.get("dictionarySize",100);
@@ -165,6 +166,12 @@ public class KMeans {
 		clusters = RandomSeedGenerator.buildRandom(conf, DESCRIPTORS_DIR,
 				clusters, k, measure);
 		log.info("Random clusters generated, running K-Means, k="+k+" maxIter="+maxIterations);
+		
+		log.info("KMeansDriver.run(...");
+		log.info(DESCRIPTORS_DIR.toString());
+		log.info(clusters.toString());
+		log.info(DICTIONARY_DIR.toString());
+		log.info("....)");
 
 		KMeansDriver.run(conf, DESCRIPTORS_DIR, clusters, DICTIONARY_DIR,
 				measure, convergenceDelta, maxIterations, true, 0.0,
