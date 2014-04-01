@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -121,6 +122,7 @@ public class KMeans {
 		for (File f : files.listFiles()) {
 			totalFiles++;
 			String docId = f.getName().split("\\.")[0];
+			log.info(String.valueOf(totalFiles));
 			try {
 				Document doc = dBuilder.parse(f);
 				doc.getDocumentElement().normalize();
@@ -186,27 +188,55 @@ public class KMeans {
 	 */
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
-        conf.addResource(new Path("/usr/local/hadoop/conf/conf/hdfs-site.xml"));
 		
+		/*
+		 * TODO: musze jakos ustawic sciezki dla jar'a do /usr/local/hadoop/conf
+		 * bo KMeansDriver nie widzi ustawien hdfs i zapisuje wyniki klasteryzacji
+		 * do lokalnego katalogu
+		 * 
+		File files = new File("/usr/local/hadoop/conf");		
+		for (File f : files.listFiles()) {
+			System.out.println(f.getAbsolutePath());
+			conf.addResource(f.getAbsolutePath());
+		}*/
+				
 		log.info("Configuration: "+conf.toString());
 		log.info("fs.default.name: "+conf.get("fs.default.name"));
-
-		if (VM.RunSequential()) {
-			System.out.println("Running as SEQ");
-		} else {
-			System.out.println("Running as MR");
-		}
 
 		FileSystem fs = FileSystem.get(conf);
 		ConfigFile configFile = new ConfigFile("settings.cfg");
 
-		// stworz pliki z deskryptorami na podstawie xml'i
-		// TODO: najlepiej zeby Anazyler zapisywal pliki od razu do hdfs (daily basis?)
-		createInput(conf, configFile, DESCRIPTORS_DIR);
-
-		// uruchom K-Means dla deskryptorow
-		runClustering(conf, configFile);
+		
+		boolean skipCreatingDictionary = false;
+		try {
+			List<String> largs = Arrays.asList(args);
+			if (largs.contains("skipdict")) {
+				skipCreatingDictionary = true;
+			}
+		}
+		catch (Exception e) {
+			
+		}
+		
+		if (!skipCreatingDictionary) {
+			
+			if (VM.RunSequential()) {
+				System.out.println("Running as SEQ");
+			} else {
+				System.out.println("Running as MR");
+			}
+		
+			// stworz pliki z deskryptorami na podstawie xml'i
+			// TODO: najlepiej zeby Anazyler zapisywal pliki od razu do hdfs (daily basis?)
+			createInput(conf, configFile, DESCRIPTORS_DIR);
+	
+			// uruchom K-Means dla deskryptorow
+			runClustering(conf, configFile);
+			
+		}
+		else {
+			log.info("Skipped creating dictionary");
+		}
 
 		ImageToTextDriver.run(conf, DESCRIPTORS_DIR, DICTIONARY_DIR,
 				VISUAL_WORDS_DIR, VM.RunSequential());
