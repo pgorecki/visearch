@@ -324,6 +324,10 @@ public class KMeans {
 
 		String sql;
 		PreparedStatement ps;
+		
+		log.info("Saving doc "+docId+", "+termFreq.size()+" terms");
+		
+		
 
 		// build json string and IFS
 		Iterator<Entry<Integer, Integer>> it = termFreq.entrySet().iterator();
