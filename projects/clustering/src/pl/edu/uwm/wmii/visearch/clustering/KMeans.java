@@ -189,6 +189,9 @@ public class KMeans {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		
+		System.out.println("mem total: "+Runtime.getRuntime().totalMemory());
+		System.out.println("mem free: "+Runtime.getRuntime().freeMemory());
+		
 		/*
 		 * TODO: musze jakos ustawic sciezki dla jar'a do /usr/local/hadoop/conf
 		 * bo KMeansDriver nie widzi ustawien hdfs i zapisuje wyniki klasteryzacji
@@ -238,8 +241,13 @@ public class KMeans {
 			log.info("Skipped creating dictionary");
 		}
 
+		System.out.println("mem free (b): "+Runtime.getRuntime().freeMemory());
+		
 		ImageToTextDriver.run(conf, DESCRIPTORS_DIR, DICTIONARY_DIR,
 				VISUAL_WORDS_DIR, VM.RunSequential());
+		
+		System.out.println("mem free (c): "+Runtime.getRuntime().freeMemory());
+
 
 		String dbUrl = configFile.get("dbUrl");
 		String dbUser = configFile.get("dbUser");
@@ -256,6 +264,11 @@ public class KMeans {
 			String docId = entry.getFirst().toString();
 			String line = entry.getSecond().toString();
 			StringTokenizer tokenizer = new StringTokenizer(line);
+			
+			System.out.println(docId);
+			System.out.println("mem free (d): "+Runtime.getRuntime().freeMemory());
+
+			
 			Map<Integer, Integer> termFreq = new TreeMap<Integer, Integer>();
 			while (tokenizer.hasMoreTokens()) {
 				int key = Integer.parseInt(tokenizer.nextToken());
@@ -266,6 +279,9 @@ public class KMeans {
 				}
 			}
 			saveToDb(docId, termFreq, dbConnection);
+			System.out.println("mem free (e): "+Runtime.getRuntime().freeMemory());
+			System.gc();
+			System.out.println("mem free (f): "+Runtime.getRuntime().freeMemory());
 		}
 
 		dbConnection.close();
