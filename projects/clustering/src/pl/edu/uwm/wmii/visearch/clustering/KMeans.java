@@ -189,8 +189,9 @@ public class KMeans {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		
+		System.out.println("mem total (MB): "+Runtime.getRuntime().totalMemory()/(1024*1024));
 		System.out.println("mem total: "+Runtime.getRuntime().totalMemory());
-		System.out.println("mem free: "+Runtime.getRuntime().freeMemory());
+		System.out.println("mem free (a): "+Runtime.getRuntime().freeMemory());
 		
 		/*
 		 * TODO: musze jakos ustawic sciezki dla jar'a do /usr/local/hadoop/conf
@@ -267,7 +268,6 @@ public class KMeans {
 			
 			System.out.println(docId);
 			System.out.println("mem free (d): "+Runtime.getRuntime().freeMemory());
-
 			
 			Map<Integer, Integer> termFreq = new TreeMap<Integer, Integer>();
 			while (tokenizer.hasMoreTokens()) {
@@ -341,7 +341,7 @@ public class KMeans {
 		String sql;
 		PreparedStatement ps;
 		
-		log.info("Saving doc "+docId+", "+termFreq.size()+" terms");
+		System.out.println("Saving doc "+docId+", "+termFreq.size()+" terms");
 		
 		
 
@@ -366,15 +366,14 @@ public class KMeans {
 
 		}
 		json += "}";
-		System.out.println(termFreq);
-		System.out.println(json);
+		//System.out.println(termFreq);
+		//System.out.println(json);
 
 		sql = "INSERT INTO ImageRepresentations SELECT ImageId, ? FROM Images WHERE FileName LIKE ?";
 		ps = dbConnection.prepareStatement(sql);
 		ps.setString(1, json);
 		ps.setString(2, docId.toString() + "%");
 		ps.executeUpdate();
-
 
 	}
 
