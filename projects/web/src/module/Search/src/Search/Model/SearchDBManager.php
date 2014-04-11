@@ -67,6 +67,13 @@ class SearchDBManager {
 	   //SELECT COUNT(*), ImageId FROM `IFS` WHERE `VisualWord` 
 	   //IN (3,5,4,6,108, 160, 577,1261,1427) GROUP BY ImageId ORDER BY 1 DESC
 		
+		if(!$vw)
+		{
+			//empty array rise error or return null
+			return  array();
+		}
+		
+		
 		$adapter= $this->db;
 		//$adapter->query('SELECT COUNT(*), ImageId FROM `IFS` WHERE `VisualWord` IN (?) GROUP BY ImageId ORDER BY 1 DESC ', $vw);
 		
@@ -79,6 +86,8 @@ class SearchDBManager {
 
 		$result = $statement->execute();
 		
+		
+		//TODO: remove hardcoded folder name
 		$folerDir = '/pics/';
 		$imgRank = array();
 		foreach ($result as $row) {
@@ -120,18 +129,20 @@ class SearchDBManager {
 		$vw=$matches[1];
 		$occur = $matches[2];
 		
-		//combine new associative array form vw and occurences
-		$vw = array_combine($vw, $occur);
+		if(! (empty($vw) || empty($occur)))
+		{
+			//combine new associative array form vw and occurences
+			// vw are the keys and occur are the values
+			$vw = array_combine($vw, $occur);
+			//sort by keys
+			ksort($vw);
 		
-		ksort($vw);
-		
-		
+		}
+			
 		//json format
 		//$picRep ='{"1":5,"2":6}';
 		//$vw= json_decode($picRep,true);
-		
 		return $vw;
-		
 	}
 	
 	/*

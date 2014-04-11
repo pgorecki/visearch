@@ -77,11 +77,13 @@ class ImageTable implements ServiceLocatorAwareInterface {
 		) );
 		$row = $rowset->current ();
 		
-		$row = $this->setImagePath ( $row );
+		
 		
 		if (! $row) {
 			throw new \Exception ( "Could not find row $id" );
 		}
+		$row = $this->setImagePath ( $row );
+		
 		return $row;
 	}
 	public function saveImage(Image $image) {

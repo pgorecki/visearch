@@ -35,3 +35,37 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+
+#imageRepresentation {
+	margin: 10px;
+	padding: 5px;
+	clear: both;
+}
+
+#imageRepresentation pre{
+	max-height: 200px;
+	overflow: scroll;
+}
+
+
+#imageBlock {
+	
+	margin: 10px;
+	padding: 10px;
+	
+}
+
+#imageBlock img{
+	margin: 5px;
+	float:left;
+	max-height: 150px;
+}
+#imageBlock p{
+	float:left;
+}
+
+
+#imageInfo {
+	
+}

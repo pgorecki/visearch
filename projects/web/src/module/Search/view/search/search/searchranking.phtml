@@ -7,33 +7,41 @@
  <h1><?php echo $this->escapeHtml($title); ?></h1>
 
  <div>
- <h2>Query Image from Database</h2>
  <p>
- Image id comes from url, default 1 eg. http://visearch/search/searchranking/4 
+ Image id comes from query string, default images 1 eg. http://visearch.uwm.eudu.pl/search/searchranking/4 
  </p>
- <img src="<?php echo $image->imagePath ?>" alt="<?php echo $imge->imageId?>" />
  
  
+ <div id="imageInfo">
+ 
+ <div id="imageBlock">
+ <img src="<?php echo $image->imagePath ?>" alt="<?php echo $image->imageId?>" />
  <p>
  Image ID= <?php echo $imgRep['ImageId']; ?> <br/>
  Scoring: <strong>Euclidean</strong> <br/>
+ </p>
+ </div>
  
+ <div id="imageRepresentation">
  <strong>Image Representation:</strong> 
  <pre>
 <?php echo $imgRep['Representation']; ?>
  </pre>
+ </div>
  
- </p>
+ 
+ </div>
  
  </div>
  
  
- <h2>Image results</h2>
+ <h2>Search results</h2>
+  
+ <?php if(empty($images)) echo "Empty search results!" ?> 
+  
   
  <ol>
-
  <?php foreach ($images as $im) : ?>
- 
  <li>
  <a href="<?php echo $this->url('search',array('action'=>'searchranking', 'id'=>$im->imageId))?>">
  	<img src="<?php echo $this->escapeHtml($im->path);?>" alt="<?php echo $this->escapeHtml($im->imageId);?>" />

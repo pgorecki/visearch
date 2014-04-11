@@ -48,25 +48,26 @@ class SearchController extends AbstractActionController
 		$id = (int) $this->params()->fromRoute('id', 1);
 		$img = $this->getImageTable()->getImage($id);
 		
-		
-		$imgRep = $data->getImgRepresentation($id);
-		
-		
-		$picId = $imgRep['ImageId'];
-		$picRep = $imgRep['Representation'];
-		
-		$vw = $data->getVisualWordsFromRep($picRep);
+		if(!empty($img))
+		{
+			$imgRep = $data->getImgRepresentation($id);
 			
-		
-		$candidates =$data->getRankingCandidates($vw);
-		
-		$scoring = new EuclideanScore();
-		
-		$candidates= $scoring->Score($vw,$candidates);
-		
-		
-		//$ranking = $data->getRankingForImage($imgRep);
+			$picId = $imgRep['ImageId'];
+			$picRep = $imgRep['Representation'];
 			
+			$vw = $data->getVisualWordsFromRep($picRep);
+	
+	
+			$candidates =$data->getRankingCandidates($vw);
+			if(!empty($candidates))
+			{	
+				$scoring = new EuclideanScore();			
+				$candidates= $scoring->Score($vw,$candidates);
+			}
+			//$ranking = $data->getRankingForImage($imgRep);
+
+		}
+		
 		return new ViewModel(array(
 				'images' => $candidates,
 				'image' => $img,

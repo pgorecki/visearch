@@ -7,7 +7,11 @@ abstract class RankingScore {
 	
 	public function sortCandidates($candidates){
 		
-		usort($candidates,array($this,'sortCompare'));
+		
+		if(!empty($candidates)) {
+			usort($candidates,array($this,'sortCompare'));
+		}
+		
 		
 		return $candidates;
 		
