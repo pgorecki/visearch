@@ -273,7 +273,12 @@ public class Representation {
 			ps = dbConnection.prepareStatement(sql);
 			ps.setInt(1, e.getKey());
 			ps.setString(2, docId + "%");
-			ps.executeUpdate();
+			try {
+				ps.executeUpdate();
+			}
+			catch (Exception exc) {
+				log.debug("Duplicated IFS for "+docId);				
+			}
 		}
 		json += "}";
 
@@ -281,7 +286,12 @@ public class Representation {
 		ps = dbConnection.prepareStatement(sql);
 		ps.setString(1, json);
 		ps.setString(2, docId.toString() + "%");
-		ps.executeUpdate();
+		try {
+			ps.executeUpdate();
+		}
+		catch (Exception exc) {
+			log.debug("Duplicated ImageRepresentations for "+docId);
+		}
 
 	}
 
