@@ -1,4 +1,4 @@
-package pl.edu.uwm.wmii.visearch.clustering;
+package pl.edu.uwm.wmii.visearch.core;
 
 public class VM {
 

@@ -38,9 +38,9 @@ import org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
 
 
-import pl.edu.uwm.wmii.visearch.clustering.VM;
 import pl.edu.uwm.wmii.visearch.core.ConfigFile;
 import pl.edu.uwm.wmii.visearch.core.ImageToTextDriver;
+import pl.edu.uwm.wmii.visearch.core.VM;
 
 public class Representation {
 

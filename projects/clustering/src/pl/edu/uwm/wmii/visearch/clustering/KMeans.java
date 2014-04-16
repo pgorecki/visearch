@@ -67,6 +67,7 @@ import org.apache.hadoop.io.SequenceFile;
 
 import pl.edu.uwm.wmii.visearch.core.ConfigFile;
 import pl.edu.uwm.wmii.visearch.core.ImageToTextDriver;
+import pl.edu.uwm.wmii.visearch.core.VM;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
