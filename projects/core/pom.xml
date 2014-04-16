@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>visearch.core</groupId>
   <artifactId>visearch.core</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -16,4 +16,22 @@
       </plugin>
     </plugins>
   </build>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-utils</artifactId>
+			<version>0.5</version>
+		</dependency>
+	</dependencies>  
+  
 </project>
