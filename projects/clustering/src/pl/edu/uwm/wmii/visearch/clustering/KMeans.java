@@ -66,6 +66,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 
 import pl.edu.uwm.wmii.visearch.core.ConfigFile;
+import pl.edu.uwm.wmii.visearch.core.ImageToTextDriver;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -244,6 +246,7 @@ public class KMeans {
 
 		System.out.println("mem free (b): "+Runtime.getRuntime().freeMemory());
 		
+		/*
 		ImageToTextDriver.run(conf, DESCRIPTORS_DIR, DICTIONARY_DIR,
 				VISUAL_WORDS_DIR, VM.RunSequential());
 		
@@ -285,6 +288,7 @@ public class KMeans {
 		}
 
 		dbConnection.close();
+		*/
 
 		/*
 		 * MyClusterClassificationDriver .run(conf, DESCRIPTORS_DIR,

@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>visearch.clustering</groupId>
-	<artifactId>visearch.clustering</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>visearch.representation</groupId>
+  <artifactId>visearch.representation</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+	<build>	    
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
@@ -20,13 +19,13 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>pl.edu.uwm.wmii.visearch.clustering.KMeans</mainClass>
+							<mainClass>pl.edu.uwm.wmii.visearch.representation.Representation</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>clustering</finalName>
+					<finalName>representation</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -57,5 +56,5 @@
 			<artifactId>visearch.core</artifactId>
 			<version>0.2</version>
 		</dependency>
-	</dependencies>
+	</dependencies>  
 </project>
