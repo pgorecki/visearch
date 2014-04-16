@@ -181,7 +181,7 @@ public class Representation {
 		}
 		
 		if (makeBigfile) {
-			System.out.println("Skipping making bigfile");
+			System.out.println("Making bigfile");
 			System.out.println("Input: "+inputDir);
 			System.out.println("Bigfile: "+bigfileDir);
 			createInput(conf, inputDir, bigfileDir);
@@ -215,7 +215,7 @@ public class Representation {
 		}
 
 		for (Pair<Text, Text> entry : new SequenceFileDirIterable<Text, Text>(
-				VISUAL_WORDS_DIR, PathType.LIST, conf)) {
+				outputDir, PathType.LIST, conf)) {
 			String docId = entry.getFirst().toString();
 			String line = entry.getSecond().toString();
 			StringTokenizer tokenizer = new StringTokenizer(line);
@@ -232,7 +232,12 @@ public class Representation {
 					termFreq.put(key, 1);
 				}
 			}
-			saveToDb(docId, termFreq, dbConnection);
+			try {
+				saveToDb(docId, termFreq, dbConnection);
+			}
+			catch (Exception e) {
+				log.info(e.toString());
+			}
 			System.out.println("mem free (e): "+Runtime.getRuntime().freeMemory());
 			System.gc();
 			System.out.println("mem free (f): "+Runtime.getRuntime().freeMemory());
