@@ -62,7 +62,7 @@ class SearchDBManager {
 	 * 
 	 * @param array $vw - asociative array with visual word numbers and
 	 */
-	public function getRankingCandidates($vw, $minNumVW=10) {
+	public function getRankingCandidates($vw, $minNumVW=3) {
 	
 	   //SELECT COUNT(*), ImageId FROM `IFS` WHERE `VisualWord` 
 	   //IN (3,5,4,6,108, 160, 577,1261,1427) GROUP BY ImageId ORDER BY 1 DESC
