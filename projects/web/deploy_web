@@ -1,0 +1,17 @@
+#!/bin/bash
+
+LOCAL=~/Dev/visearch/projects/web/
+
+REMOTE_SERVER=213.184.8.84
+USER=grant
+REMOTE_FOLDER=/mnt/visearch/web
+
+REMOTE=$USER@$REMOTE_SERVER:$REMOTE_FOLDER
+
+echo 'Deploy to '$REMOTE
+
+rsync -rtv --progress --exclude-from 'exlude-list.txt' $LOCAL $REMOTE
+
+ssh $USER@$REMOTE_SERVER 'chown -R' $USER $REMOTE_FOLDER
+
+ssh $USER@$REMOTE_SERVER 'chmod 755' $REMOTE_FOLDER
