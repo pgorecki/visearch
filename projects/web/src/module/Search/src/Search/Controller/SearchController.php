@@ -48,6 +48,8 @@ class SearchController extends AbstractActionController
 		$id = (int) $this->params()->fromRoute('id', 1);
 		$img = $this->getImageTable()->getImage($id);
 		
+		
+		
 		if(!empty($img))
 		{
 			$imgRep = $data->getImgRepresentation($id);
@@ -59,10 +61,14 @@ class SearchController extends AbstractActionController
 	
 	
 			$candidates =$data->getRankingCandidates($vw);
+			$errorMsg='';
+			
 			if(!empty($candidates))
 			{	
 				$scoring = new EuclideanScore();			
 				$candidates= $scoring->Score($vw,$candidates);
+			}else {
+				$errorMsg="Empty results set.";
 			}
 			//$ranking = $data->getRankingForImage($imgRep);
 
@@ -71,7 +77,8 @@ class SearchController extends AbstractActionController
 		return new ViewModel(array(
 				'images' => $candidates,
 				'image' => $img,
-				'imgRep' =>$imgRep
+				'imgRep' =>$imgRep,
+				'msg' =>$errorMsg
 		));
 	}
 	

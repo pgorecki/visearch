@@ -62,10 +62,11 @@ class SearchDBManager {
 	 * 
 	 * @param array $vw - asociative array with visual word numbers and
 	 */
-	public function getRankingCandidates($vw, $minNumVW=3) {
+	public function getRankingCandidates($vw, $minNumVW=12) {
 	
 	   //SELECT COUNT(*), ImageId FROM `IFS` WHERE `VisualWord` 
 	   //IN (3,5,4,6,108, 160, 577,1261,1427) GROUP BY ImageId ORDER BY 1 DESC
+		
 		
 		if(!$vw)
 		{
@@ -82,8 +83,8 @@ class SearchDBManager {
 		$t = join(',', $keyVW);		
 
 		$numVW = array($minNumVW);
-		$statement = $adapter->createStatement('SELECT COUNT(*) as numVW, I.ImageId, IR.Representation, Concat(I.FileDirectory,I.FileName) as ImPath  FROM `IFS`, Images I, ImageRepresentations IR WHERE IFS.ImageId =I.ImageId and I.ImageId=IR.ImageId and `VisualWord` in ('.$t.') GROUP BY ImageId HAVING numVW>? ORDER BY 1 DESC ',$numVW);
-
+		$statement = $adapter->createStatement('SELECT COUNT(*) as numVW, I.ImageId, IR.Representation, Concat(I.FileDirectory,I.FileName) as ImPath  FROM `IFS`, Images I, ImageRepresentations IR WHERE IFS.ImageId =I.ImageId and I.ImageId=IR.ImageId and `VisualWord` in ('.$t.') GROUP BY ImageId HAVING numVW>? ORDER BY 1 DESC LIMIT 80 ',$numVW);
+		
 		$result = $statement->execute();
 		
 		
@@ -122,9 +123,14 @@ class SearchDBManager {
 	 */
 	public function getVisualWordsFromRep($imgRep){
 		
-		//regexp
+		//regexp - where representation in format {2035:1.0,2:1.0}
 		$pattern = '/(\d+):(\d+.?\d*)/';
+		//regexp - where representation in format {"2035":"1.0","2":"1.0"}
+		$pattern = '/"(\d+)":"(\d+.?\d*)"/';
+		//regexp - for both formats
+		//$pattern = '/"?(\d+)"?:"?(\d+.?\d*)"?/';
 		preg_match_all($pattern, $imgRep, $matches);
+		
 		
 		$vw=$matches[1];
 		$occur = $matches[2];
