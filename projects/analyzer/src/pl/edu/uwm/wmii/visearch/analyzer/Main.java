@@ -59,34 +59,95 @@ public class Main {
 			//Przetwarzane są obrazy ściągnięte przez crawlera i zapisane do bazy (przetwarzane są te co nie zostały wcześniej przetworzone)
 			
 			System.out.println("Compute all descriptors");
-			//computeAllDescriptors();
+			computeAllDescriptors();
 		}
 		else if(cmd.hasOption('i') && cmd.hasOption('o'))
 		{
 			//przetwarzamy tylko jeden obrazek
 			String imgParam = cmd.getOptionValue('i');
-			Path imgPath = Paths.get(imgParam);
-			
-			String imgName = imgPath.getFileName().toString();
-			String descName = imgName+".xml";
-			
 			String outFolder = cmd.getOptionValue('o');
+			computeDescriptorsForImg(imgParam,outFolder);
 			
-			String xmlPath =Paths.get(outFolder, descName).toString(); 
-					//String.format("%s/%s",outFolder,imgName );
-
-			System.out.println(imgParam+"->"+outFolder);
-			System.out.println("Compute file "+imgParam);
-			System.out.println("Save xml file "+xmlPath);
 			
+//			Path imgPath = Paths.get(imgParam);			
+//			String imgName = imgPath.getFileName().toString();
+//			String descName = imgName+".xml";
+//			String xmlPath =Paths.get(outFolder, descName).toString(); 
+//			System.out.println(imgParam+"->"+outFolder);
+//			System.out.println("Compute file "+imgParam);
+//			System.out.println("Save xml file "+xmlPath);
 
+			System.exit(0);
 		} else {
 
 			System.out.println("Wrong input parameters");
-
+			System.exit(1);
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param imgPath - ścieżka do pliki obrazu
+	 * @param outFolder - ścieżka do folderu do zapisu w xml'u deskryptorów
+	 * @throws IOException
+	 * @throws InvalidKeyException
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	private static void computeDescriptorsForImg(String imgPath, String outFolder) throws IOException,
+	InvalidKeyException, SQLException, ClassNotFoundException {
+
+		
+
+
+		Date dt = new Date();
+		
+
+		//wybrany deskryptor
+		ExtractionMethod exMethod = ExtractionMethod.SIFT;
+
+		//klasa do ekstrakcji punktów kluczowych
+		KeyPointExtractor extractor = new KeyPointExtractor();
+		//klasa pozwalająca na zapis do pliku xml, wyekstrachowanych punktów kluczowych
+		KeyPointXMLStorage storage = new KeyPointXMLStorage();
+
+		
+
+		//Tablica punktów kluczowych do wypełnienia
+		MatOfKeyPoint kp = new MatOfKeyPoint();
+		//tablica 2D deskryptorów
+		Mat des = new Mat();
+
+		Path imagePath = Paths.get(imgPath);
+		File imageFile = new File(imgPath);
+
+		if(imageFile.exists())
+		{
+			System.out.print(" process file: "+imgPath);
+
+			long start=System.currentTimeMillis();
+			
+			//ekstrakcja punktów kluczowych oraz utworzenie deskryptorów
+			extractor.Extract(imgPath, exMethod, kp, des);
+
+			//utwórz scieżke zapisu dla pliku xml z deskryptorami
+			String fileName = Paths.get(imgPath).getFileName().toString();
+			String descr = exMethod.toString();
+			String descriptorXMLFile = descr + "/"+ fileName + ".xml";
+						
+			//zapisz plik na dysku
+			storage.save(kp, des, outFolder + "/" + descriptorXMLFile, exMethod);
+
+			double elapsed = (0.0+System.currentTimeMillis()-start)/1000;
+			
+			System.out.println(", elapsed:"+elapsed+" -- [Ok]");
+		}else {
+			System.out.println(" ->File not exitst:"+imagePath.toString());
+		}
+
+	}
+	
 
 	/**
 	 * Tworzy parser dla lini commend, korzysta z commons-cli (dodany jako pakiet maven)

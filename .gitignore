@@ -1,5 +1,7 @@
 *.class
 phpinfo.php
+#opencv error files
+hs_err*
 
 # Package Files #
 *.jar

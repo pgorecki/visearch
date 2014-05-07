@@ -23,6 +23,6 @@ Przetwarzenie pojedynczego obrazu
 ================
 
 Polecenie:
-analyzer -img /home/user/plik.jpg -desc /home/user/plik_sift.xml
+analyzer -i /home/user/plik.jpg -o /home/user/plik_sift.xml
 
 
