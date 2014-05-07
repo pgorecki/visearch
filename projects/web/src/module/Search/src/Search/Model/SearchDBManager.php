@@ -59,8 +59,8 @@ class SearchDBManager {
 	
 	
 	/**
-	 * 
-	 * @param array $vw - asociative array with visual word numbers and
+	 * Zwraca listę kandydatków do rankingu(obrazów) które zawierają któreś z słów wizualnych przekazanych w tablicy $vw
+	 * @param array $vw - tablica zawierająca numery słów wizualnych
 	 */
 	public function getRankingCandidates($vw, $minNumVW=12) {
 	
@@ -111,6 +111,54 @@ class SearchDBManager {
 		
 	}
 	
+	/**
+	 * Zwraca listę kandydatków do rankingu(obrazów) które zawierają słowa kluczowe takie jakie zawiera obraz o podanym $imgId
+	 * @param int $imgId - id obrazu
+	 */
+	public function getRankingCandidatesForImage($imgId, $minNumVW=10) {
+	
+	
+		$adapter= $this->db;
+		
+		$limit = 100;
+		$params = array('id'=>$imgId,
+						'nVW'=>$minNumVW);
+						//'lim'=>$limit);
+		
+		$fp = function($name) use ($adapter) { return $adapter->driver->formatParameterName($name); };
+		
+		$sql='SELECT IR.ImageId, T1.numVW, IR.Representation, Concat(I.FileDirectory,I.FileName) as ImPath FROM ImageRepresentations IR, Images I,(SELECT COUNT( *) AS numVW, IFS.ImageId FROM IFS, (SELECT VisualWord FROM IFS WHERE ImageId ='.$fp('id').') I1 WHERE IFS.VisualWord = I1.VisualWord GROUP BY IFS.ImageId HAVING numVW >'.$fp('nVW').' ORDER BY 1 DESC LIMIT 100 ) T1 WHERE IR.ImageId = T1.ImageId AND I.ImageId = T1.ImageId';
+		
+		$statement = $adapter->createStatement($sql,$params);
+		
+		
+		$result = $statement->execute();
+	
+	
+		//TODO: remove hardcoded folder name
+		$folerDir = '/pics/';
+		$imgRank = array();
+		foreach ($result as $row) {
+				
+			$rankCand = new ImageRankingCandidate();
+			$rankCand->imageId =$row['ImageId'];
+			$rankCand->vwIntersection =$row['numVW'];
+				
+			$rankCand->path = $folerDir. $row['ImPath'];
+				
+				
+			$rankCand->representation = $this->getVisualWordsFromRep($row['Representation']);
+				
+			$rankCand->score = $rankCand->vwIntersection;
+				
+			$imgRank[]=$rankCand;
+		}
+	
+		return  $imgRank;
+	
+	}
+	
+	
 	
 	/**
 	 * Get visual wors array from string representation
@@ -124,11 +172,11 @@ class SearchDBManager {
 	public function getVisualWordsFromRep($imgRep){
 		
 		//regexp - where representation in format {2035:1.0,2:1.0}
-		$pattern = '/(\d+):(\d+.?\d*)/';
+		//$pattern = '/(\d+):(\d+.?\d*)/';
 		//regexp - where representation in format {"2035":"1.0","2":"1.0"}
 		$pattern = '/"(\d+)":"(\d+.?\d*)"/';
 		//regexp - for both formats
-		//$pattern = '/"?(\d+)"?:"?(\d+.?\d*)"?/';
+		$pattern = '/"?(\d+)"?:"?(\d+.?\d*)"?/';
 		preg_match_all($pattern, $imgRep, $matches);
 		
 		
@@ -150,6 +198,8 @@ class SearchDBManager {
 		//$vw= json_decode($picRep,true);
 		return $vw;
 	}
+	
+	
 	
 	/*
 	public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {

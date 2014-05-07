@@ -60,7 +60,10 @@ class SearchController extends AbstractActionController
 			$vw = $data->getVisualWordsFromRep($picRep);
 	
 	
-			$candidates =$data->getRankingCandidates($vw);
+			//$candidates =$data->getRankingCandidates($vw);
+			
+			$candidates =$data->getRankingCandidatesForImage($id);
+			
 			$errorMsg='';
 			
 			if(!empty($candidates))
