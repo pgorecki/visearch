@@ -1,9 +1,12 @@
 *.class
+phpinfo.php
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
+# xdebug profile files
 xdebug*
 
 # Editor files
